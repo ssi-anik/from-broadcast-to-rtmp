@@ -116,9 +116,12 @@ export function askForInput (message, minimumLength = null, errorMessage = null)
 
 export function execCommand (cmd, args, onData, onError, onFinish) {
     // https://stackoverflow.com/a/66581232/2190689
-    /*let spawn = require('child_process').spawn;
-    let proc = spawn(cmd, args.split(' '));*/
-    let proc = require('child_process').spawn(cmd, args.split(' '));
+
+    if ( typeof args === 'string' ) {
+        args = args.split(' ');
+    }
+
+    let proc = require('child_process').spawn(cmd, args);
     proc.stdout.on('data', onData);
     proc.stderr.setEncoding("utf8")
     proc.stderr.on('data', onError);

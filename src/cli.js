@@ -5,6 +5,7 @@ import {
     askForInput,
     defaultFrom,
     defaultTo,
+    execCommand,
     fancyLogger,
     getAllowedOrDefault,
     getHlsUrlForYoutubeVideo,
@@ -109,22 +110,44 @@ function parseArgToOptions (rawArgs) {
  * FFMPEG realted methods
  */
 
-function ffmpegConfiguration (options) {
-    const configurations = {};
-    configurations['-i'] = options['hlsUrl'];
-    configurations['-y'] = '';
-    configurations['-use_wallclock_as_timestamps'] = 1;
-    configurations['-preset'] = 'veryfast';
-    configurations['-tune'] = 'zerolatency';
-    configurations['-bufsize'] = 1000;
-    configurations['-async'] = 1;
-    configurations['-c:a'] = 'aac';
-    configurations['-c:v'] = 'libx264';
-    configurations['-x264opts'] = 'keyint=3:min-keyint=2:no-scenecut';
-    configurations['-f'] = 'flv';
-    configurations[generateRTMPUrl(options)] = '';
+function generateFFMPEGConfiguration (options) {
+    return [
+        '-i',
+        options['hlsUrl'],
+        '-use_wallclock_as_timestamps',
+        1,
+        '-preset',
+        'veryfast',
+        '-tune',
+        'zerolatency',
+        '-bufsize',
+        1000,
+        '-async',
+        1,
+        '-c:a',
+        'aac',
+        '-c:v',
+        'libx264',
+        '-x264opts',
+        'keyint=3:min-keyint=2:no-scenecut',
+        '-f',
+        'flv',
+        generateRTMPUrl(options)
+    ];
+}
 
-    return configurations;
+function onData (data) {
+    console.log(data);
+}
+
+function onError (err) {
+    console.log(err);
+}
+
+function onFinished (info) {
+    return () => {
+        fancyLogger(`[INFO]: Task "${info}" finished`, 'white')
+    };
 }
 
 export async function cli (args) {
@@ -145,9 +168,9 @@ export async function cli (args) {
                 };
             });
         })
-        .then(options => ffmpegConfiguration(options))
-        .then(configuration => {
-            console.log(configuration);
+        .then(options => generateFFMPEGConfiguration(options))
+        .then(args => {
+            execCommand('ffmpeg', args, onData, onError, onFinished('Streaming'))
         })
         .catch(e => fancyLogger(`[ERROR]: ${e.message}`, 'red'));
 }
