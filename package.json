@@ -1,10 +1,9 @@
 {
-    "name": "@ssi-anik/from-broadcast-to-rtmp",
+    "name": "broadcast-to-rtmp",
     "version": "1.0.0",
     "description": "Relay from broadcasts to RTMP Media server",
     "main": "src/index.js",
     "bin": {
-        "@ssi-anik/from-broadcast-to-rtmp": "bin/broadcast-to-rtmp",
         "broadcast-to-rtmp": "bin/broadcast-to-rtmp"
     },
     "publishConfig": {
