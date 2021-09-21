@@ -7,41 +7,31 @@ import {
     defaultTo,
     fancyLogger,
     getAllowedOrDefault,
-    getYoutubeVideoId,
-    getHlsUrlForYoutubeVideo
+    getHlsUrlForYoutubeVideo,
+    getYoutubeVideoId
 } from "./helpers";
 
-function getYoutubeStreamUrl (url) {
-    //YoutubeVideo.json.streamingData:.hlsManifestUrl
-    return scrapper.getVideoInfo(url).then(video => {
-        console.log(video.info.isLiveContent, video.info);
-        return new Promise(resolve => {
-            return resolve(video.YoutubeVideo.json.streamingData.hlsManifestUrl || '')
-        });
-    }).catch(e => {
-        fancyLogger(`Error occurred when parsing video from: "${url}". Reason: ${e.message}`, 'red');
-        process.exit(1);
-    });
-}
+/**
+ * Generate URLS for RTMP
+ */
 
-async function setHLSUrl (options) {
-    const streamUrl = options.streamURL;
-    let url = '';
-    if ( options.from === allowedFrom['youtube'] ) {
-        url = await getYoutubeStreamUrl(streamUrl);
+function generateRTMPUrl (options) {
+    const host = options.rtmpHost;
+    const key = options.rtmpKey;
+
+    if ( allowedTo['facebook'] === options.to ) {
+        return generateRTMPUrlForFacebook(host, key);
     }
 
-    if ( url.length === 0 ) {
-        throw Error('Cannot fetch stream URL for: ' + streamUrl);
-    }
-
-    return {
-        ...options,
-        hls_url: url,
-    };
+    throw Error(`Invalid RTMP server: ${options.to}`);
 }
 
-// ------------
+function generateRTMPUrlForFacebook (host, key) {
+    host = host || "rtmps://live-api-s.facebook.com:443/rtmp/";
+    fancyLogger(`[INFO]: RTMP host: ${host}`, 'white');
+
+    return `${host}${key}`;
+}
 
 /**
  * RTMP Server related methods
@@ -53,7 +43,7 @@ function askForRTMPKey (server) {
             resolve(askForFacebookRTMPKey());
         }
 
-        reject(`Invalid RTMP server. ${server}`);
+        reject(`Invalid RTMP server: ${server}`);
     });
 }
 
@@ -74,7 +64,7 @@ function askForStreamUrl (service) {
             resolve(askForYoutubeURL());
         }
 
-        reject(`Invalid broadcasting server. ${service}`);
+        reject(`Invalid broadcasting server: ${service}`);
     });
 }
 
@@ -97,9 +87,11 @@ function parseArgToOptions (rawArgs) {
     const args = arg({
         '--from': String,
         '--to': String,
+        '--rtmp-host': String,
 
         '-f': '--from',
         '-t': '--to',
+        '-r': '--rtmp-host',
     }, {
         argv: rawArgs.slice(2),
     });
@@ -107,9 +99,32 @@ function parseArgToOptions (rawArgs) {
     return new Promise(resolve => {
         resolve({
             'from': getAllowedOrDefault(allowedFrom, args['--from'], defaultFrom),
-            'to': getAllowedOrDefault(allowedTo, args['--to'], defaultTo)
+            'to': getAllowedOrDefault(allowedTo, args['--to'], defaultTo),
+            'rtmpHost': args['--rtmp-host'],
         })
     });
+}
+
+/**
+ * FFMPEG realted methods
+ */
+
+function ffmpegConfiguration (options) {
+    const configurations = {};
+    configurations['-i'] = options['hlsUrl'];
+    configurations['-y'] = '';
+    configurations['-use_wallclock_as_timestamps'] = 1;
+    configurations['-preset'] = 'veryfast';
+    configurations['-tune'] = 'zerolatency';
+    configurations['-bufsize'] = 1000;
+    configurations['-async'] = 1;
+    configurations['-c:a'] = 'aac';
+    configurations['-c:v'] = 'libx264';
+    configurations['-x264opts'] = 'keyint=3:min-keyint=2:no-scenecut';
+    configurations['-f'] = 'flv';
+    configurations[generateRTMPUrl(options)] = '';
+
+    return configurations;
 }
 
 export async function cli (args) {
@@ -130,6 +145,9 @@ export async function cli (args) {
                 };
             });
         })
-        .then(options => console.log(options))
+        .then(options => ffmpegConfiguration(options))
+        .then(configuration => {
+            console.log(configuration);
+        })
         .catch(e => fancyLogger(`[ERROR]: ${e.message}`, 'red'));
 }
