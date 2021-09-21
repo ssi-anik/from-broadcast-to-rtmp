@@ -39,13 +39,11 @@ function generateRTMPUrlForFacebook (host, key) {
  */
 
 function askForRTMPKey (server) {
-    return new Promise((resolve, reject) => {
-        if ( allowedTo['facebook'] === server ) {
-            resolve(askForFacebookRTMPKey());
-        }
+    if ( allowedTo['facebook'] === server ) {
+        return askForFacebookRTMPKey();
+    }
 
-        reject(`Invalid RTMP server: ${server}`);
-    });
+    throw Error(`Invalid RTMP server: ${server}`);
 }
 
 function askForFacebookRTMPKey () {
@@ -60,13 +58,11 @@ function askForFacebookRTMPKey () {
  */
 
 function askForStreamUrl (service) {
-    return new Promise((resolve, reject) => {
-        if ( allowedFrom['youtube'] === service ) {
-            resolve(askForYoutubeURL());
-        }
+    if ( allowedFrom['youtube'] === service ) {
+        return askForYoutubeURL();
+    }
 
-        reject(`Invalid broadcasting server: ${service}`);
-    });
+    throw Error(`Invalid broadcasting server: ${service}`);
 }
 
 function askForYoutubeURL () {

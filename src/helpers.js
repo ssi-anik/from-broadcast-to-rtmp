@@ -85,7 +85,6 @@ export function getHlsUrlForYoutubeVideo (videoId) {
             'streamingData',
             'hlsManifestUrl',
         ], '');
-
         if ( url === '' ) {
             throw Error('Cannot extract data for the URL.')
         }
