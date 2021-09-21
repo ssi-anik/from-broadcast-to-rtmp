@@ -1,0 +1,30 @@
+{
+    "name": "@ssi-anik/from-broadcast-to-rtmp",
+    "version": "1.0.0",
+    "description": "Relay from broadcasts to RTMP Media server",
+    "main": "src/index.js",
+    "bin": {
+        "@ssi-anik/from-broadcast-to-rtmp": "bin/broadcast-to-rtmp",
+        "broadcast-to-rtmp": "bin/broadcast-to-rtmp"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "keywords": [
+        "cli",
+        "from-broadcast-to-rtmp",
+        "broadcast-m3u8-to-rtmp",
+        "youtube",
+        "youtube-broadcast",
+        "facebook",
+        "rtmp"
+    ],
+    "author": {
+        "name": "Syed Sirajul Islam Anik",
+        "email": "sirajul.islam.anik@gmail.com"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "esm": "^3.2.25"
+    }
+}
