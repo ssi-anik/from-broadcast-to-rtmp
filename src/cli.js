@@ -91,8 +91,11 @@ function parseArgToOptions (rawArgs) {
         '--rtmp-host': String,
 
         '-f': '--from',
+        '-s': '--from',
         '-t': '--to',
+        '-d': '--to',
         '-r': '--rtmp-host',
+        '-rh': '--rtmp-host',
     }, {
         argv: rawArgs.slice(2),
     });
