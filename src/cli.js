@@ -1,5 +1,6 @@
-import arg from 'arg';
-import {
+const arg = require('arg');
+
+const {
     allowedFrom,
     allowedTo,
     askForInput,
@@ -10,7 +11,7 @@ import {
     getAllowedOrDefault,
     getHlsUrlForYoutubeVideo,
     getYoutubeVideoId
-} from "./helpers";
+} = require("./helpers");
 
 /**
  * Generate URLS for RTMP
@@ -149,7 +150,7 @@ function onFinished (info) {
     };
 }
 
-export async function cli (args) {
+async function cli (args) {
     parseArgToOptions(args)
         .then(options => {
             return askForRTMPKey(options.to).then(key => {
@@ -173,3 +174,5 @@ export async function cli (args) {
         })
         .catch(e => fancyLogger(`[ERROR]: ${e.message}`, 'red'));
 }
+
+module.exports = cli;

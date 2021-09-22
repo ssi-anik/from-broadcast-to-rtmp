@@ -1,27 +1,27 @@
-import inquirer from "inquirer";
-import chalk from "chalk";
-import axios from "axios";
+const axios = require('axios');
+const chalk = require('chalk');
+const inquirer = require('inquirer');
 
-export const allowedFrom = {
+const allowedFrom = {
     'yt': 'youtube',
     'youtube': 'youtube',
 };
-export const allowedTo = {
+const allowedTo = {
     'fb': 'facebook',
     'facebook': 'facebook',
 };
-export const defaultFrom = 'youtube';
-export const defaultTo = 'facebook';
+const defaultFrom = 'youtube';
+const defaultTo = 'facebook';
 
-export function getAllowedOrDefault (allowed, provided, defaultSelected) {
+function getAllowedOrDefault (allowed, provided, defaultSelected) {
     return allowed[provided && provided.toLowerCase() || defaultSelected] || defaultSelected
 }
 
-export function logger (text) {
+function logger (text) {
     console.log(text);
 }
 
-export function getYoutubeVideoId (str) {
+function getYoutubeVideoId (str) {
     /**
      * Sauce: https://github.com/Rubenennj/youtube-scrapper/blob/81371c07128f5601dce53563865c581183d10b7d/src/util/Util.ts#L42
      */
@@ -46,7 +46,7 @@ export function getYoutubeVideoId (str) {
     return str;
 }
 
-export function objectTraversal (data, keys, defaultValue = undefined) {
+function objectTraversal (data, keys, defaultValue = undefined) {
     if ( keys.length === 0 ) {
         return data;
     }
@@ -60,7 +60,7 @@ export function objectTraversal (data, keys, defaultValue = undefined) {
     return objectTraversal(selectedNodeValue, keys, defaultValue);
 }
 
-export function getHlsUrlForYoutubeVideo (videoId) {
+function getHlsUrlForYoutubeVideo (videoId) {
     // https://github.com/Rubenennj/youtube-scrapper/blob/81371c07128f5601dce53563865c581183d10b7d/src/functions/getVideoInfo.ts#L5
     return axios.get(`https://www.youtube.com/watch?v=${videoId}&hl=en`).then(r => {
         const json = JSON.parse(r.data.split("var ytInitialPlayerResponse = ")[1].split(";</script>")[0]);
@@ -93,11 +93,11 @@ export function getHlsUrlForYoutubeVideo (videoId) {
     });
 }
 
-export function fancyLogger (text, color = 'green') {
+function fancyLogger (text, color = 'green') {
     logger(chalk.keyword(color)(text));
 }
 
-export function askForInput (message, minimumLength = null, errorMessage = null) {
+function askForInput (message, minimumLength = null, errorMessage = null) {
     return inquirer.prompt({
         'type': 'input',
         'name': 'input',
@@ -113,7 +113,7 @@ export function askForInput (message, minimumLength = null, errorMessage = null)
     });
 }
 
-export function execCommand (cmd, args, onData, onError, onFinish) {
+function execCommand (cmd, args, onData, onError, onFinish) {
     // https://stackoverflow.com/a/66581232/2190689
 
     if ( typeof args === 'string' ) {
@@ -125,4 +125,18 @@ export function execCommand (cmd, args, onData, onError, onFinish) {
     proc.stderr.setEncoding("utf8")
     proc.stderr.on('data', onError);
     proc.on('close', onFinish);
+}
+
+module.exports = {
+    allowedTo,
+    allowedFrom,
+    defaultFrom,
+    defaultTo,
+    getAllowedOrDefault,
+    logger,
+    fancyLogger,
+    getYoutubeVideoId,
+    getHlsUrlForYoutubeVideo,
+    askForInput,
+    execCommand
 }

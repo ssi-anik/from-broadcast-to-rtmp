@@ -2,7 +2,7 @@
     "name": "broadcast-to-rtmp",
     "version": "1.0.0",
     "description": "Relay from broadcasts to RTMP Media server",
-    "main": "src/index.js",
+    "main": "src/broadcast-to-rtmp.js",
     "bin": {
         "broadcast-to-rtmp": "bin/broadcast-to-rtmp"
     },
