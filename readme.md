@@ -1,65 +1,106 @@
 # From Broadcast to RTMP
 
-From stream servers:
+Broadcast Live streams one server to another server.
 
-- Youtube
-
-To Stream servers:
-
-- Facebook
+[![Github All Releases](https://img.shields.io/github/downloads/ssi-anik/from-broadcast-to-rtmp/total?label=Total%20downloads&style=for-the-badge)]()
+[![Github All Releases](https://img.shields.io/github/downloads/ssi-anik/from-broadcast-to-rtmp/latest/total?label=Recent%20release%20download&style=for-the-badge)]()
 
 ## Requirements
 
-Host machine must have
+This CLI application requires the following on your host machine.
 
-- `node` installed. Tested with `v14.15`
-- `ffmpeg` installed. Tested with `4.2.4-1ubuntu0.1`
+- **[FFMPEG](https://www.ffmpeg.org/)**
 
-## Installation
+Install requirements on your host machine before running this application.
 
-- Clone the repository.
-- Run `yarn install`
-- Run `npm link`
+## Download
+
+You can download suitable executable from the [releases](https://github.com/ssi-anik/from-broadcast-to-rtmp/releases)
 
 ## Usage
 
-Example: To stream from **Youtube** to **Facebook**.
+If you run `broadcast-to-rtmp --help`, it'll list available options.
 
-* Grab the URL for Youtube. Example formats:
+Example:
+
+```text
+Usage: broadcast-to-rtmp [options]
+
+Options:
+  -V, --version                    output the version number
+  -s, --source <source>            From the source where it's broadcasting (default: "youtube")
+  -d, --destination <destination>  To the destination where you want to broadcast (default: "facebook")
+  -ru, --rtmp-url <url>            Overwrite the existing RTMP URL (default: "")
+  -h, --help                       display help for command
+```
+
+<table>
+    <thead>
+        <tr>
+            <td><b>Supported source</b></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>youtube</code> for Youtube <b>[DEFAULT]</b></td>
+        </tr>
+        <tr>
+            <td><code>yt</code> for Youtube</td>
+        </tr>
+    </tbody>
+</table>
+
+<table>
+    <thead>
+        <tr>
+            <td><b>Supported destination</b></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>facebook</code> for Facebook <b>[DEFAULT]</b></td>
+        </tr>
+        <tr>
+            <td><code>fb</code> for Facebook</td>
+        </tr>
+    </tbody>
+</table>
+
+To broadcast stream from **youtube** to **facebook**, from your terminal run
+
+```shell
+broadcast-to-rtmp --source youtube --destination facebook
+
+# OR 
+broadcast-to-rtmp
+# default source: youtube & default destination: facebook
+```
+
+* If facebook is the broadcast destination, visit [Live Producer Dashboard](https://www.facebook.com/live/producer).
+    - Grab your Stream key.
+
+* If youtube is the source, you can pass any of the following lines as source URL.
     - https://www.youtube.com/v/s2h28p4s-Xs
     - https://www.youtube.com/embed/s2h28p4s-Xs
     - https://youtu.be/s2h28p4s-Xs
     - https://www.youtube.com/watch?v=s2h28p4s-Xs
     - `s2h28p4s-Xs`
-* Visit [Facebook Live Producer Dashboard](https://www.facebook.com/live/producer).
-    - Grab your Stream key.
-* From your console, run `broadcast-to-rtmp`. It'll then ask questions for required information. Answer to those
-  questions.
 
-## Command variations
+* Provide answers for the executing command.
 
-```shell
-broadcast-to-rtmp
+> Use`broadcast-to-rtmp --rtmp-url "rtmps://live-api-s.facebook.com:443/rtmp/"` if the destination server changed the RTMP URL.
+> Otherwise, it'll use the default values
 
-broadcast-to-rtmp --from youtube
-broadcast-to-rtmp --from yt
+## Build from source
 
-broadcast-to-rtmp --to facebook
-broadcast-to-rtmp --to fb
+You'll need to have `node` (tested on `14.15.x`) installed on your host machine.
 
-broadcast-to-rtmp --from youtube --to facebook
-
-broadcast-to-rtmp --rtmp-host "rtmps://live-api-s.facebook.com:443/rtmp/"
-```
-
-## Aliases
-
-- `--from` has alias with `-f` `-s`.
-- `--to` has alias with `-t` `-d`.
-- `--rtmp-host` has alias with `-r` `-rh` (If the default host doesn't work.)
+- Clone the repository.
+- Run `yarn install` to install dependencies.
+- Run `./bin/broadcast-to-rtmp --help`.
 
 ## Note
 
-- **THIS CLI APPLICATION ONLY WORKS FOR LIVE STREAM FROM THE REMOTE SOURCE(S). ANY VIDEO OTHER THAN LIVE STREAMS WILL
-  NOT WORK.**
-- **POSSIBLY THE PROJECT IS COMPLETE FROM MY SIDE, YOU CAN FORK AND MAINTAIN YOUR OWN CHANGES IF NOT MERGED.**
+- **THIS CLI APPLICATION ONLY WORKS FOR LIVE STREAM FROM THE SOURCE(S).**
+- **POSSIBLY THE PROJECT IS COMPLETE FROM MY SIDE, YOU CAN FORK AND MAINTAIN YOUR OWN CHANGES IF GIVEN PR IS NOT
+  MERGED.**
