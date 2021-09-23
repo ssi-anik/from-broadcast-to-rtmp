@@ -1,0 +1,48 @@
+name: Release Application
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  publish:
+    name: Build & Release app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone codebase
+        uses: actions/checkout@v2
+      
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      
+      - name: Get tag name
+        id: tag
+        run: echo ::set-output name=name::`node ./get-release-name.js ${{ github.run_number }}`
+      
+      - name: Install project dependencies
+        run: |
+          yarn install --prefer-offline
+          npm install -g pkg
+      
+      - name: Make application
+        run: pkg -t node14-linux-x64,node14-macos-x64,node14-win-x64,node14-alpine-x64 src/broadcast-to-rtmp.js
+      
+      - name: Release asset
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag.outputs.name }}
+          draft: false
+          prerelease: false
+          files: |
+            broadcast-to-rtmp*
