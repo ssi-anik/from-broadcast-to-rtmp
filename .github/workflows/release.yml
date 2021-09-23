@@ -9,6 +9,7 @@ on:
 
 jobs:
   publish:
+    if: startsWith(github.ref, 'refs/tags/')
     name: Build & Release app
     runs-on: ubuntu-latest
     steps:
