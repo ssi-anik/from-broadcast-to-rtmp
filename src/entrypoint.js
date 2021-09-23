@@ -150,7 +150,7 @@ function onFinished (info) {
     };
 }
 
-async function cli (args) {
+async function entrypoint (args) {
     parseArgToOptions(args)
         .then(options => {
             return askForRTMPKey(options.to).then(key => {
@@ -175,4 +175,4 @@ async function cli (args) {
         .catch(e => fancyLogger(`[ERROR]: ${e.message}`, 'red'));
 }
 
-module.exports = cli;
+module.exports = entrypoint;
