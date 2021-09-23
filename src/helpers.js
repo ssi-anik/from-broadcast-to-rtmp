@@ -2,19 +2,41 @@ const axios = require('axios');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 
-const allowedFrom = {
+const allowedSources = {
     'yt': 'youtube',
     'youtube': 'youtube',
 };
-const allowedTo = {
+const allowedDestinations = {
     'fb': 'facebook',
     'facebook': 'facebook',
 };
 const defaultFrom = 'youtube';
 const defaultTo = 'facebook';
 
-function getAllowedOrDefault (allowed, provided, defaultSelected) {
-    return allowed[provided && provided.toLowerCase() || defaultSelected] || defaultSelected
+function validateInputAgainstAllowedData (allowed, provided, reference = null) {
+    const lowercase = provided && provided.toLowerCase() || '';
+    if ( !allowed[lowercase] ) {
+        const msg = `"${provided}" is invalid${reference ? ` for ${reference}` : ''}. Allowed values are: "${Object.keys(allowed)
+            .join('", "')}"`;
+
+        throw Error(msg)
+    }
+
+    return allowed[provided];
+}
+
+function validateUrl (str) {
+    if ( str === '' ) {
+        return str;
+    }
+
+    const url = new URL(str);
+
+    if ( !(url.protocol === "http:" || url.protocol === "https:") ) {
+        throw Error('Protocol must be HTTP/HTTPS');
+    }
+
+    return str;
 }
 
 function logger (text) {
@@ -128,11 +150,12 @@ function execCommand (cmd, args, onData, onError, onFinish) {
 }
 
 module.exports = {
-    allowedTo,
-    allowedFrom,
+    allowedDestinations,
+    allowedSources,
     defaultFrom,
     defaultTo,
-    getAllowedOrDefault,
+    validateInputAgainstAllowedData,
+    validateUrl,
     logger,
     fancyLogger,
     getYoutubeVideoId,

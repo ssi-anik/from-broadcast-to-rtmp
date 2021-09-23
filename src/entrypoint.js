@@ -1,14 +1,15 @@
 const {Command} = require('commander');
 
 const {
-    allowedFrom,
-    allowedTo,
+    allowedSources,
+    allowedDestinations,
     askForInput,
     defaultFrom,
     defaultTo,
     execCommand,
+    validateUrl,
     fancyLogger,
-    getAllowedOrDefault,
+    validateInputAgainstAllowedData,
     getHlsUrlForYoutubeVideo,
     getYoutubeVideoId
 } = require("./helpers");
@@ -21,11 +22,11 @@ function generateRTMPUrl (options) {
     const host = options.rtmpHost;
     const key = options.rtmpKey;
 
-    if ( allowedTo['facebook'] === options.to ) {
+    if ( allowedDestinations['facebook'] === options.destination ) {
         return generateRTMPUrlForFacebook(host, key);
     }
 
-    throw Error(`Invalid RTMP server: ${options.to}`);
+    throw Error(`Invalid RTMP server: ${options.destination}`);
 }
 
 function generateRTMPUrlForFacebook (host, key) {
@@ -40,7 +41,7 @@ function generateRTMPUrlForFacebook (host, key) {
  */
 
 function askForRTMPKey (server) {
-    if ( allowedTo['facebook'] === server ) {
+    if ( allowedDestinations['facebook'] === server ) {
         return askForFacebookRTMPKey();
     }
 
@@ -59,7 +60,7 @@ function askForFacebookRTMPKey () {
  */
 
 function askForStreamUrl (service) {
-    if ( allowedFrom['youtube'] === service ) {
+    if ( allowedSources['youtube'] === service ) {
         return askForYoutubeURL();
     }
 
@@ -86,19 +87,20 @@ function registerCommand (rawArgs) {
     program.version(require('../package.json').version);
 
     program
-        /*.option('-s, --source <source>', "From the source where it's broadcasting", defaultFrom)
-        .option('-d, --destination <destination>', "To the destination where you want to broadcast", defaultTo)*/
+        .option('-s, --source <source>', "From the source where it's broadcasting", defaultFrom)
+        .option('-d, --destination <destination>', "To the destination where you want to broadcast", defaultTo)
         .option('-rh, --rtmp-host <host>', 'Overwrite the existing RTMP host', '')
-        .option('-t, --to <destination>', "To the destination where you want to broadcast", defaultTo)
-        .option('-f, --from <source>', "From the source where it's broadcasting", defaultFrom)
+        /*.option('-t, --to <destination>', "To the destination where you want to broadcast", defaultTo)
+        .option('-f, --from <source>', "From the source where it's broadcasting", defaultFrom)*/
         .parse(rawArgs);
 
     const options = program.opts();
+
     return new Promise(resolve => {
         resolve({
-            'from': getAllowedOrDefault(allowedFrom, options.from, defaultFrom),
-            'to': getAllowedOrDefault(allowedTo, options.to, defaultTo),
-            'rtmpHost': options.rtmpHost,
+            'source': validateInputAgainstAllowedData(allowedSources, options.source, 'source'),
+            'destination': validateInputAgainstAllowedData(allowedDestinations, options.destination, 'destination'),
+            'rtmpHost': validateUrl(options.rtmpHost),
         })
     });
 }
@@ -150,7 +152,7 @@ function onFinished (info) {
 async function entrypoint (args) {
     registerCommand(args)
         .then(options => {
-            return askForRTMPKey(options.to).then(key => {
+            return askForRTMPKey(options.destination).then(key => {
                 return {
                     ...options,
                     rtmpKey: key
@@ -158,7 +160,7 @@ async function entrypoint (args) {
             });
         })
         .then(options => {
-            return askForStreamUrl(options.from).then(url => {
+            return askForStreamUrl(options.source).then(url => {
                 return {
                     ...options,
                     hlsUrl: url,
