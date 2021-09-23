@@ -7,10 +7,6 @@ on:
       - v*
   workflow_dispatch:
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
   publish:
     name: Build & Release app
@@ -34,7 +30,10 @@ jobs:
           npm install -g pkg
       
       - name: Make application
-        run: pkg -t node14-linux-x64,node14-macos-x64,node14-win-x64,node14-alpine-x64 src/broadcast-to-rtmp.js
+        run: |
+          echo $PWD
+          ls -al
+          pkg -t node14-linux-x64,node14-macos-x64,node14-win-x64,node14-alpine-x64 src/broadcast-to-rtmp.js
       
       - name: Release asset
         uses: softprops/action-gh-release@v1
