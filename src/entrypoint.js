@@ -21,8 +21,6 @@ function registerCommandAndParseInput (rawArgs) {
         .option('-s, --source <source>', "From the source where it's broadcasting", defaultSource)
         .option('-d, --destination <destination>', "To the destination where you want to broadcast", defaultDestination)
         .option('-ru, --rtmp-url <url>', 'Overwrite the existing RTMP URL', '')
-        /*.option('-t, --to <destination>', "To the destination where you want to broadcast", defaultTo)
-        .option('-f, --from <source>', "From the source where it's broadcasting", defaultFrom)*/
         .parse(rawArgs);
 
     const options = program.opts();
