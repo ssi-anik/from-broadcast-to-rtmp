@@ -82,7 +82,7 @@ function askForYoutubeURL () {
  * Command related methods
  */
 
-function registerCommand (rawArgs) {
+function registerCommandAndParseInput (rawArgs) {
     const program = new Command();
     program.version(require('../package.json').version);
 
@@ -98,11 +98,19 @@ function registerCommand (rawArgs) {
 
     return new Promise(resolve => {
         resolve({
-            'source': validateInputAgainstAllowedData(allowedSources, options.source, 'source'),
-            'destination': validateInputAgainstAllowedData(allowedDestinations, options.destination, 'destination'),
-            'rtmpHost': validateUrl(options.rtmpHost),
+            'source': options.source,
+            'destination': options.destination,
+            'rtmpHost': options.rtmpHost,
         })
     });
+}
+
+function validateInputsAndParseAsOptions (inputs) {
+    return {
+        'source': validateInputAgainstAllowedData(allowedSources, inputs.source, 'source'),
+        'destination': validateInputAgainstAllowedData(allowedDestinations, inputs.destination, 'destination'),
+        'rtmpHost': validateUrl(inputs.rtmpHost),
+    };
 }
 
 /**
@@ -150,7 +158,8 @@ function onFinished (info) {
 }
 
 async function entrypoint (args) {
-    registerCommand(args)
+    registerCommandAndParseInput(args)
+        .then(inputs => validateInputsAndParseAsOptions(inputs))
         .then(options => {
             return askForRTMPKey(options.destination).then(key => {
                 return {
