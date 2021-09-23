@@ -61,26 +61,6 @@ async function entrypoint (args) {
         .then(inputs => validateInputsAndParseAsOptions(inputs))
         .then(options => mapOptionsToImplementation(options))
         .then(options => broadcast(options))
-        /*.then(options => {
-            return askForRTMPKey(options.destination).then(key => {
-                return {
-                    ...options,
-                    rtmpKey: key
-                };
-            });
-        })
-        .then(options => {
-            return askForStreamUrl(options.source).then(url => {
-                return {
-                    ...options,
-                    hlsUrl: url,
-                };
-            });
-        })
-        .then(options => generateFFMPEGConfiguration(options))
-        .then(args => {
-            execCommand('ffmpeg', args, onData, onError, onFinished('Streaming'))
-        })*/
         .catch(e => fancyLogger(`[ERROR]: ${e.message}`, 'red'));
 }
 
