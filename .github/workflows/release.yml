@@ -23,11 +23,12 @@ jobs:
         run: echo ::set-output name=name::`node ./get-release-name.js ${{ github.run_number }}`
       
       - name: Install project dependencies
-        run: |
-          yarn install --prefer-offline
-          npm install -g pkg
+        run: yarn install --prefer-offline
       
-      - name: Make application
+      - name: Install packager
+        run: npm install -g pkg
+
+      - name: Package application
         run: pkg -t node14-linux-x64,node14-macos-x64,node14-win-x64,node14-alpine-x64 src/broadcast-to-rtmp.js
       
       - name: Release asset
