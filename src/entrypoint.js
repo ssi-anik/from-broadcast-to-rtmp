@@ -1,4 +1,4 @@
-const arg = require('arg');
+const {Command} = require('commander');
 
 const {
     allowedFrom,
@@ -78,30 +78,27 @@ function askForYoutubeURL () {
 }
 
 /**
- * Parser
+ * Command related methods
  */
 
-function parseArgToOptions (rawArgs) {
-    const args = arg({
-        '--from': String,
-        '--to': String,
-        '--rtmp-host': String,
+function registerCommand (rawArgs) {
+    const program = new Command();
+    program.version(require('../package.json').version);
 
-        '-f': '--from',
-        '-s': '--from',
-        '-t': '--to',
-        '-d': '--to',
-        '-r': '--rtmp-host',
-        '-rh': '--rtmp-host',
-    }, {
-        argv: rawArgs.slice(2),
-    });
+    program
+        /*.option('-s, --source <source>', "From the source where it's broadcasting", defaultFrom)
+        .option('-d, --destination <destination>', "To the destination where you want to broadcast", defaultTo)*/
+        .option('-rh, --rtmp-host <host>', 'Overwrite the existing RTMP host', '')
+        .option('-t, --to <destination>', "To the destination where you want to broadcast", defaultTo)
+        .option('-f, --from <source>', "From the source where it's broadcasting", defaultFrom)
+        .parse(rawArgs);
 
+    const options = program.opts();
     return new Promise(resolve => {
         resolve({
-            'from': getAllowedOrDefault(allowedFrom, args['--from'], defaultFrom),
-            'to': getAllowedOrDefault(allowedTo, args['--to'], defaultTo),
-            'rtmpHost': args['--rtmp-host'],
+            'from': getAllowedOrDefault(allowedFrom, options.from, defaultFrom),
+            'to': getAllowedOrDefault(allowedTo, options.to, defaultTo),
+            'rtmpHost': options.rtmpHost,
         })
     });
 }
@@ -151,7 +148,7 @@ function onFinished (info) {
 }
 
 async function entrypoint (args) {
-    parseArgToOptions(args)
+    registerCommand(args)
         .then(options => {
             return askForRTMPKey(options.to).then(key => {
                 return {
