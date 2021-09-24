@@ -38,6 +38,7 @@ Options:
     <thead>
         <tr>
             <td><b>Supported source</b></td>
+            <td><b>Supported destination</b></td>
         </tr>
     </thead>
     <tbody>
@@ -48,18 +49,6 @@ Options:
                 <code>yt</code>
                 for Youtube
             </td>
-        </tr>
-    </tbody>
-</table>
-
-<table>
-    <thead>
-        <tr>
-            <td><b>Supported destination</b></td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
             <td>
                 <b>[DEFAULT]</b>
                 <code>facebook</code> 
@@ -68,6 +57,7 @@ Options:
             </td>
         </tr>
         <tr>
+            <td></td>
             <td>
                 <code>youtube</code> 
                 <code>yt</code> 
