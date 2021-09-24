@@ -1,7 +1,12 @@
 const {ExecutableBroadcaster} = require('./executable_broadcaster');
 
 class Ffmpeg extends ExecutableBroadcaster {
-    arguments (sourceUrl, destinationUrl) {
+
+    name () {
+        return 'ffmpeg';
+    }
+
+    arguments (extraConfig, sourceUrl, destinationUrl) {
         return [
             '-i',
             sourceUrl,
@@ -21,6 +26,7 @@ class Ffmpeg extends ExecutableBroadcaster {
             'libx264',
             '-x264opts',
             'keyint=3:min-keyint=2:no-scenecut',
+            ...extraConfig,
             '-f',
             'flv',
             destinationUrl

@@ -17,7 +17,7 @@ class Destination {
     }
 
     askForRTMPKeyErrorMessage () {
-        return null;
+        return 'RTMP key cannot be empty';
     }
 
     askUserForRTMPKey () {
@@ -35,8 +35,20 @@ class Destination {
     getRTMPKeyAppendedUrl () {
         return this.askUserForRTMPKey()
             .then(key => {
-                return `${this.getUrl()}/${key}`;
+                return this.getUrl().replace(/\{KEY\}/, key);
             });
+    }
+
+    ffmpegExtraConfig () {
+        return [];
+    }
+
+    extraConfig (type) {
+        if ( type === 'ffmpeg' ) {
+            return this.ffmpegExtraConfig();
+        }
+
+        return [];
     }
 }
 

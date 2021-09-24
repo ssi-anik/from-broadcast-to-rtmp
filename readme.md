@@ -9,7 +9,7 @@ Broadcast Live streams one server to another server.
 
 This CLI application requires the following on your host machine.
 
-- **[FFMPEG](https://www.ffmpeg.org/)**
+- **[FFmpeg](https://www.ffmpeg.org/)**
 
 Install requirements on your host machine before running this application.
 
@@ -38,30 +38,35 @@ Options:
     <thead>
         <tr>
             <td><b>Supported source</b></td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>youtube</code> for Youtube <b>[DEFAULT]</b></td>
-        </tr>
-        <tr>
-            <td><code>yt</code> for Youtube</td>
-        </tr>
-    </tbody>
-</table>
-
-<table>
-    <thead>
-        <tr>
             <td><b>Supported destination</b></td>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td><code>facebook</code> for Facebook <b>[DEFAULT]</b></td>
+            <td>
+                <b>[DEFAULT]</b>
+                <code>youtube</code>
+                <code>yt</code>
+                for Youtube
+            </td>
+            <td>
+                <b>[DEFAULT]</b>
+                <code>facebook</code>
+                <code>fb</code>
+                for Facebook
+            </td>
         </tr>
         <tr>
-            <td><code>fb</code> for Facebook</td>
+            <td>
+                <code>twitch</code> 
+                <code>ttv</code> 
+                for Twitch
+            </td>
+            <td>
+                <code>youtube</code> 
+                <code>yt</code> 
+                for Youtube
+            </td>
         </tr>
     </tbody>
 </table>
@@ -88,8 +93,10 @@ broadcast-to-rtmp
 
 * Provide answers for the executing command.
 
-> Use`broadcast-to-rtmp --rtmp-url "rtmps://live-api-s.facebook.com:443/rtmp/"` if the destination server changed the RTMP URL.
-> Otherwise, it'll use the default values
+> Use`broadcast-to-rtmp --rtmp-url "rtmps://live-api-s.facebook.com:443/rtmp/{KEY}"` if the destination server changed the RTMP URL.
+> Otherwise, it'll use the default value.
+>
+> When providing the RTMP URL, make sure you put exactly the keyword **{KEY}** in the URL. It'll replace the RTMP Key in that position. Otherwise, it won't work.
 
 ## Build from source
 

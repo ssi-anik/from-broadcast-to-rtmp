@@ -17,6 +17,19 @@ class Source {
         return null;
     }
 
+    disallowEmptyString (str, msg) {
+        str = str.trim();
+        if ( !str ) {
+            throw Error(msg);
+        }
+
+        return str;
+    }
+
+    disallowEmptyUrl (url) {
+        return this.disallowEmptyString(url, 'URL cannot be empty')
+    }
+
     validateUrl (url) {
         return validateUrl(url);
     }

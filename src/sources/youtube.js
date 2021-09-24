@@ -30,12 +30,7 @@ class Youtube extends Source {
     }
 
     validateUrl (url) {
-        url = url.trim();
-        if ( !url ) {
-            throw Error('URL cannot be empty');
-        }
-
-        return url;
+        return this.disallowEmptyUrl(url);
     }
 
     getHLSUrlFromSourceUrl (url) {
