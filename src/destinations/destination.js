@@ -38,6 +38,18 @@ class Destination {
                 return this.getUrl().replace(/\{KEY\}/, key);
             });
     }
+
+    ffmpegExtraConfig () {
+        return [];
+    }
+
+    extraConfig (type) {
+        if ( type === 'ffmpeg' ) {
+            return this.ffmpegExtraConfig();
+        }
+
+        return [];
+    }
 }
 
 module.exports = {

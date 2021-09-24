@@ -7,6 +7,10 @@ class Broadcaster {
         this.destination = destination;
     }
 
+    name () {
+        throw Error("Unimplemented name method");
+    }
+
     verifySourceType (source) {
         if ( !(source instanceof Source) ) {
             throw Error('Invalid source for broadcasting.');
@@ -32,14 +36,16 @@ class Broadcaster {
 
         return destination.getRTMPKeyAppendedUrl()
             .then(rtmpUrl => {
+                const extraConfig = destination.extraConfig(this.name());
                 return source.getHLSUrl().then(hlsUrl => {
                     return {
                         source: hlsUrl,
-                        destination: rtmpUrl
+                        destination: rtmpUrl,
+                        extraConfig: extraConfig,
                     }
                 });
             })
-            .then(urls => this.broadcastToDestination(urls.source, urls.destination));
+            .then(data => this.broadcastToDestination(data.extraConfig, data.source, data.destination));
     }
 }
 

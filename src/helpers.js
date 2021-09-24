@@ -8,6 +8,8 @@ const allowedSources = {
 const allowedDestinations = {
     'fb': 'facebook',
     'facebook': 'facebook',
+    'yt': 'youtube',
+    'youtube': 'youtube',
 };
 const defaultSource = 'youtube';
 const defaultDestination = 'facebook';

@@ -19,12 +19,12 @@ class ExecutableBroadcaster extends Broadcaster {
         throw Error("Unimplemented executable method");
     }
 
-    arguments (sourceUrl, destinationUrl) {
+    arguments (extraConfig, sourceUrl, destinationUrl) {
         throw Error('Unimplemented arguments method');
     }
 
-    broadcastToDestination (sourceUrl, destinationUrl) {
-        return execCommand(this.executable(), this.arguments(sourceUrl, destinationUrl), this.onData, this.onError, this.onClose);
+    broadcastToDestination (extraConfig, sourceUrl, destinationUrl) {
+        return execCommand(this.executable(), this.arguments(extraConfig, sourceUrl, destinationUrl), this.onData, this.onError, this.onClose);
     }
 }
 
