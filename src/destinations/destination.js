@@ -17,7 +17,7 @@ class Destination {
     }
 
     askForRTMPKeyErrorMessage () {
-        return null;
+        return 'RTMP key cannot be empty';
     }
 
     askUserForRTMPKey () {
