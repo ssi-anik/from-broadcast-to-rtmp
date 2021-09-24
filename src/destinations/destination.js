@@ -35,7 +35,7 @@ class Destination {
     getRTMPKeyAppendedUrl () {
         return this.askUserForRTMPKey()
             .then(key => {
-                return `${this.getUrl()}/${key}`;
+                return this.getUrl().replace(/\{KEY\}/, key);
             });
     }
 }

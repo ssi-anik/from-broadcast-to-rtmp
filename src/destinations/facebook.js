@@ -11,7 +11,7 @@ class Facebook extends Destination {
     }
 
     getDefaultURL () {
-        return 'rtmps://live-api-s.facebook.com:443/rtmp/';
+        return 'rtmps://live-api-s.facebook.com:443/rtmp/{KEY}';
     }
 }
 
