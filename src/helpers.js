@@ -6,6 +6,8 @@ const allowedSources = {
     'youtube': 'youtube',
     'ttv': 'twitch',
     'twitch': 'twitch',
+    'fb': 'facebook',
+    'facebook': 'facebook',
 };
 const allowedDestinations = {
     'fb': 'facebook',
