@@ -9,7 +9,7 @@ Broadcast Live streams one server to another server.
 
 This CLI application requires the following on your host machine.
 
-- **[FFMPEG](https://www.ffmpeg.org/)**
+- **[FFmpeg](https://www.ffmpeg.org/)**
 
 Install requirements on your host machine before running this application.
 
