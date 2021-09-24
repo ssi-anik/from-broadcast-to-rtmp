@@ -88,8 +88,10 @@ broadcast-to-rtmp
 
 * Provide answers for the executing command.
 
-> Use`broadcast-to-rtmp --rtmp-url "rtmps://live-api-s.facebook.com:443/rtmp/"` if the destination server changed the RTMP URL.
-> Otherwise, it'll use the default values
+> Use`broadcast-to-rtmp --rtmp-url "rtmps://live-api-s.facebook.com:443/rtmp/{KEY}"` if the destination server changed the RTMP URL.
+> Otherwise, it'll use the default value.
+>
+> When providing the RTMP URL, make sure you put exactly the keyword **{KEY}** in the URL. It'll replace the RTMP Key in that position. Otherwise, it won't work.
 
 ## Build from source
 
