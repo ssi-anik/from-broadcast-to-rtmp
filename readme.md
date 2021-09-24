@@ -51,13 +51,17 @@ Options:
             </td>
             <td>
                 <b>[DEFAULT]</b>
-                <code>facebook</code> 
-                <code>fb</code> 
+                <code>facebook</code>
+                <code>fb</code>
                 for Facebook
             </td>
         </tr>
         <tr>
-            <td></td>
+            <td>
+                <code>twitch</code> 
+                <code>ttv</code> 
+                for Twitch
+            </td>
             <td>
                 <code>youtube</code> 
                 <code>yt</code> 

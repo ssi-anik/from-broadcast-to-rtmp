@@ -4,6 +4,8 @@ const inquirer = require('inquirer');
 const allowedSources = {
     'yt': 'youtube',
     'youtube': 'youtube',
+    'ttv': 'twitch',
+    'twitch': 'twitch',
 };
 const allowedDestinations = {
     'fb': 'facebook',
@@ -82,6 +84,18 @@ function askForInput (message, minimumLength = null, errorMessage = null) {
     });
 }
 
+function askForChoices (message, choices, preSelected = null) {
+    return inquirer.prompt({
+        'type': 'list',
+        'name': 'input',
+        message,
+        choices,
+        preSelected
+    }).then(r => {
+        return r.input;
+    });
+}
+
 function execCommand (cmd, args, onData, onError, onClose) {
     // https://stackoverflow.com/a/66581232/2190689
     // https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
@@ -103,5 +117,6 @@ module.exports = {
     fancyLogger,
     objectTraversal,
     askForInput,
+    askForChoices,
     execCommand
 }
