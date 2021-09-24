@@ -43,9 +43,10 @@ Options:
     <tbody>
         <tr>
             <td>
+                <b>[DEFAULT]</b>
                 <code>youtube</code>
                 <code>yt</code>
-                for Youtube <b>[DEFAULT]</b>
+                for Youtube
             </td>
         </tr>
     </tbody>
@@ -60,16 +61,18 @@ Options:
     <tbody>
         <tr>
             <td>
+                <b>[DEFAULT]</b>
                 <code>facebook</code> 
                 <code>fb</code> 
-                for Facebook <b>[DEFAULT]</b>
+                for Facebook
             </td>
         </tr>
         <tr>
             <td>
                 <code>youtube</code> 
                 <code>yt</code> 
-                for Youtube</td>
+                for Youtube
+            </td>
         </tr>
     </tbody>
 </table>
